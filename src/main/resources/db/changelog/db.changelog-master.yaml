@@ -1,0 +1,85 @@
+databaseChangeLog:
+   - changeSet:
+      id: 1
+      author: zloymen
+      changes:
+         - createTable:
+            tableName: system_application
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ip
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: login
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+   - changeSet:
+       id: 2
+       author: zloymen
+       label: create table application and foreign key
+       changes:
+         - createTable:
+             tableName: application
+             columns:
+               - column:
+                   name: id
+                   type: int
+                   autoIncrement: true
+                   constraints:
+                     primaryKey: true
+                     nullable: false
+               - column:
+                   name: created
+                   type: TIMESTAMP WITHOUT TIME ZONE
+                   constraints:
+                     nullable: false
+               - column:
+                   name: number
+                   type: varchar(100)
+                   constraints:
+                     nullable: false
+               - column:
+                   name: fio
+                   type: text
+                   constraints:
+                     nullable: false
+               - column:
+                   name: write
+                   type: BOOLEAN
+                   constraints:
+                     nullable: false
+               - column:
+                   name: comment
+                   type: text
+                   constraints:
+                     nullable: true
+               - column:
+                   name: system_id
+                   type: INTEGER
+                   constraints:
+                     nullable: false
+         - addForeignKeyConstraint:
+             baseColumnNames: system_id
+             baseTableName: application
+             constraintName: fk_application_system_id
+             referencedColumnNames: id
+             referencedTableName: system_application
+   - changeSet:
+       id: 3
+       author: zloymen
+       label: add unique constraint
+       changes:
+         - addUniqueConstraint:
+             columnNames: ip, login
+             constraintName: unique_system_index
+             tableName: system_application

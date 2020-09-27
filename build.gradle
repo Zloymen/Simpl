@@ -1,0 +1,80 @@
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+}
+
+group 'ru.simpl-group'
+version '1.0-SNAPSHOT'
+
+project.ext{
+    cxfVersion = '3.4.0'
+    lombok = '1.18.12'
+}
+
+
+configurations { cxfTool }
+ext {
+// Artifacts for CXF dependency.
+    cxfToolArtifacts = [
+            'cxf-tools-wsdlto-frontend-jaxws',
+            'cxf-tools-wsdlto-databinding-jaxb',
+            'cxf-tools-common',
+            'cxf-tools-wsdlto-core'
+    ]
+}
+
+dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile "org.apache.cxf:cxf-spring-boot-starter-jaxws:$cxfVersion"
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.liquibase:liquibase-core'
+
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    // https://mvnrepository.com/artifact/junit/junit
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
+
+
+    cxfToolArtifacts.each { artifact ->
+        cxfTool "org.apache.cxf:$artifact:$cxfVersion"
+    }
+}
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+task wsdl2java(type: JavaExec) {
+    ext {
+        outputDir = file("$buildDir/generated/cxf")
+    }
+    outputs.upToDateWhen { false }
+    outputs.dir outputDir
+    main = 'org.apache.cxf.tools.wsdlto.WSDLToJava'
+    classpath = configurations.cxfTool
+    args '-d', outputDir
+    args '-verbose'
+    args '-validate'
+    args 'src/main/resources/schema.wsdl'
+    doLast {
+        println "[INFO] Client files generated"
+    }
+}
+
+compileJava.dependsOn += wsdl2java
+sourceSets.main.java.srcDirs = ['src/main/java', 'build/generated/cxf']
+sourceSets.test.java.srcDirs = ['src/test/java', 'build/generated/cxf']

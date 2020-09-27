@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://simpl-group.ru/service/ws"
+                  targetNamespace="http://simpl-group.ru/service/ws">
+
+
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+                   elementFormDefault="qualified" targetNamespace="http://simpl-group.ru/service/ws">
+
+            <xs:complexType name="Application">
+                <xs:sequence>
+                    <xs:element name="fio" type="xs:string"/>
+                    <xs:element name="number" type="xs:string"/>
+                    <xs:element name="system" type="tns:System"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="System">
+                <xs:sequence>
+                    <xs:element name="ip" type="xs:string"/>
+                    <xs:element name="login" type="xs:string"/>
+                    <xs:element name="write" type="xs:boolean"/>
+                    <xs:element name="comment" type="xs:string" minOccurs = "0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="CreateApplicationRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="application" type="tns:Application"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="CreateApplicationResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                        <xs:element name="created" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="GetApplicationsRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="createFrom" type="xs:dateTime"/>
+                        <xs:element name="createTo" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:complexType name="ApplicationResult">
+                <xs:sequence>
+                    <xs:element name="ip" type="xs:string"/>
+                    <xs:element name="login" type="xs:string"/>
+                    <xs:element name="write" type="xs:boolean"/>
+                    <xs:element name="comment" type="xs:string"/>
+                    <xs:element name="num" type="xs:string"/>
+                    <xs:element name="created" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+
+
+            <xs:complexType name="GetApplicationsResponse">
+                <xs:sequence>
+                    <xs:element name="applicationResult" type="tns:ApplicationResult" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="GetApplicationsResponse" type="tns:GetApplicationsResponse"/>
+
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="CreateApplicationRequest">
+        <wsdl:part element="tns:CreateApplicationRequest" name="CreateApplicationRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="CreateApplicationResponse">
+        <wsdl:part element="tns:CreateApplicationResponse" name="CreateApplicationResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetApplicationsRequest">
+        <wsdl:part element="tns:GetApplicationsRequest" name="GetApplicationsRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetApplicationsResponse">
+        <wsdl:part element="tns:GetApplicationsResponse" name="GetApplicationsResponse">
+        </wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="SimpleTestSoapService">
+        <wsdl:operation name="CreateApplication">
+            <wsdl:input message="tns:CreateApplicationRequest" name="CreateApplicationRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:CreateApplicationResponse" name="CreateApplicationResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetApplications">
+            <wsdl:input message="tns:GetApplicationsRequest" name="GetApplicationsRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:GetApplicationsResponse" name="GetApplicationsResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="SimpleTestSoapService" type="tns:SimpleTestSoapService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="CreateApplication">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="CreateApplicationRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateApplicationResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetApplications">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="GetApplicationsRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetApplicationsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="simpleTestSSoapService">
+        <wsdl:port binding="tns:SimpleTestSoapService" name="SimpleTestSoapService">
+            <soap:address location="http://simpl-group.ru/ws/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

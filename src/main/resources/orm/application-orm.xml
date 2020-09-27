@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+                        http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+                 version="1.0">
+    <description> XML Mapping file</description>
+    <entity class="ru.simple.test.soapservice.entity.ApplicationEntity">
+        <table name="application"/>
+        <pre-persist method-name="persist"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="number">
+                <column name="number" length="100"/>
+            </basic>
+            <basic name="fio"/>
+            <basic name="write"/>
+            <basic name="comment" optional="true"/>
+            <one-to-one name="system" >
+                <join-column name="system_id" />
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </one-to-one>
+        </attributes>
+    </entity>
+
+    <entity class="ru.simple.test.soapservice.entity.SystemEntity">
+        <table name="system_application"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="ip"/>
+            <basic name="login">
+                <column name="login" length="100"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>
