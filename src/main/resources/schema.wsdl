@@ -62,12 +62,20 @@
                 </xs:sequence>
             </xs:complexType>
 
-
             <xs:complexType name="GetApplicationsResponse">
                 <xs:sequence>
                     <xs:element name="applicationResult" type="tns:ApplicationResult" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:element name="FaultDetail">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="code" type="xs:string" />
+                        <xs:element name="detail" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
 
             <xs:element name="GetApplicationsResponse" type="tns:GetApplicationsResponse"/>
 
@@ -75,34 +83,35 @@
     </wsdl:types>
 
     <wsdl:message name="CreateApplicationRequest">
-        <wsdl:part element="tns:CreateApplicationRequest" name="CreateApplicationRequest">
-        </wsdl:part>
+        <wsdl:part element="tns:CreateApplicationRequest" name="CreateApplicationRequest"/>
     </wsdl:message>
+
     <wsdl:message name="CreateApplicationResponse">
-        <wsdl:part element="tns:CreateApplicationResponse" name="CreateApplicationResponse">
-        </wsdl:part>
+        <wsdl:part element="tns:CreateApplicationResponse" name="CreateApplicationResponse"/>
     </wsdl:message>
+
     <wsdl:message name="GetApplicationsRequest">
-        <wsdl:part element="tns:GetApplicationsRequest" name="GetApplicationsRequest">
-        </wsdl:part>
+        <wsdl:part element="tns:GetApplicationsRequest" name="GetApplicationsRequest"/>
     </wsdl:message>
+
     <wsdl:message name="GetApplicationsResponse">
-        <wsdl:part element="tns:GetApplicationsResponse" name="GetApplicationsResponse">
-        </wsdl:part>
+        <wsdl:part element="tns:GetApplicationsResponse" name="GetApplicationsResponse"/>
+    </wsdl:message>
+
+    <wsdl:message name="CreateApplicationFault">
+        <wsdl:part name="faultDetail" element="tns:FaultDetail"/>
     </wsdl:message>
 
     <wsdl:portType name="SimpleTestSoapService">
         <wsdl:operation name="CreateApplication">
-            <wsdl:input message="tns:CreateApplicationRequest" name="CreateApplicationRequest">
-            </wsdl:input>
-            <wsdl:output message="tns:CreateApplicationResponse" name="CreateApplicationResponse">
-            </wsdl:output>
+            <wsdl:input message="tns:CreateApplicationRequest" name="CreateApplicationRequest"/>
+            <wsdl:output message="tns:CreateApplicationResponse" name="CreateApplicationResponse"/>
+            <wsdl:fault message="tns:CreateApplicationFault" name="CreateApplicationFault"/>
         </wsdl:operation>
+
         <wsdl:operation name="GetApplications">
-            <wsdl:input message="tns:GetApplicationsRequest" name="GetApplicationsRequest">
-            </wsdl:input>
-            <wsdl:output message="tns:GetApplicationsResponse" name="GetApplicationsResponse">
-            </wsdl:output>
+            <wsdl:input message="tns:GetApplicationsRequest" name="GetApplicationsRequest"/>
+            <wsdl:output message="tns:GetApplicationsResponse" name="GetApplicationsResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -127,6 +136,7 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
+
     <wsdl:service name="simpleTestSSoapService">
         <wsdl:port binding="tns:SimpleTestSoapService" name="SimpleTestSoapService">
             <soap:address location="http://simpl-group.ru/ws/"/>

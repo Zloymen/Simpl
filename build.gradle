@@ -22,7 +22,8 @@ ext {
             'cxf-tools-wsdlto-frontend-jaxws',
             'cxf-tools-wsdlto-databinding-jaxb',
             'cxf-tools-common',
-            'cxf-tools-wsdlto-core'
+            'cxf-tools-wsdlto-core',
+            'cxf-rt-features-logging'
     ]
 }
 
@@ -34,6 +35,8 @@ dependencies {
 
     implementation 'org.liquibase:liquibase-core'
 
+    compile group: 'org.apache.cxf', name: 'cxf-rt-features-logging', version: '3.4.0'
+
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
 
@@ -41,7 +44,6 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
-    // https://mvnrepository.com/artifact/junit/junit
     testCompile group: 'junit', name: 'junit', version: '4.13'
 
 

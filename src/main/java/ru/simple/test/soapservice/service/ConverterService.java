@@ -1,5 +1,6 @@
 package ru.simple.test.soapservice.service;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import ru.simpl_group.service.ws.System;
 import ru.simpl_group.service.ws.*;
@@ -43,16 +44,11 @@ public class ConverterService {
 
         CreateApplicationResponse response = new CreateApplicationResponse();
 
-        try {
-            GregorianCalendar gcal = GregorianCalendar.from(entity.getCreated().atZone(ZoneId.systemDefault()));
-            XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-            response.setCreated(xcal);
-            response.setId(entity.getId());
+        response.setCreated(toGregorianCalendar(entity.getCreated()));
+        response.setId(entity.getId());
 
-            return response;
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
+        return response;
+
     }
 
     public LocalDateTime toLocalDateTime(XMLGregorianCalendar dateTimeCalendar){
@@ -79,8 +75,15 @@ public class ConverterService {
         applicationResult.setWrite(entity.getWrite());
         applicationResult.setIp(systemEntity.getIp());
         applicationResult.setLogin(systemEntity.getLogin());
+        applicationResult.setCreated(toGregorianCalendar(entity.getCreated()));
 
         return applicationResult;
+    }
+
+    @SneakyThrows
+    public XMLGregorianCalendar toGregorianCalendar(LocalDateTime dateTime){
+        GregorianCalendar gcal = GregorianCalendar.from(dateTime.atZone(ZoneId.systemDefault()));
+        return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
     }
 
 }
